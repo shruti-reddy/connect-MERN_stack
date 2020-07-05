@@ -7,7 +7,7 @@ const photoSchema = new Schema({
   url: { type: String, required: true },
   description: { type: String },
   dateAdded: { type: String, default: new Date() },
-  isMain: { type: Boolean, default: true },
+  isMain: { type: Boolean, default: false },
 });
 
 module.exports = mongoose.model("Photo", photoSchema);

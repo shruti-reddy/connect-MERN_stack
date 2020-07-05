@@ -25,28 +25,6 @@ module.exports = buildSchema(`
         token: String!
         tokenExpiration: Int!
     }
-    type Photo{
-        _id: ID!
-        url: String!
-        description: String!
-        dateAdded: String
-        isMain: Boolean
-        user: User!
-    }
-    type Like{
-        liked: User!
-        likedby: User!
-    }
-    type Message{
-        sender: User!
-        recipient: User!
-        content: String!
-        isRead: Boolean
-        dateRead: String
-        messageSent: String
-        senderDeleted: Boolean
-        recipientDeleted: Boolean
-    }
     input UserSaveType{
         userName: String!
         gender: String!
@@ -72,33 +50,15 @@ module.exports = buildSchema(`
         country: String
         password: String
     }
-    input PhotoSaveType{
-        url: String!
-        description: String!
-    }
-    input SendMessageType{
-        recipientId: ID!,
-        content:String
-    }
     type RootQuery{
         users: [User!]!
-        photos: [Photo!]
-        likes: [Like!]
-        messages: [Message!]
         login(userName: String!, password: String!): AuthData!
     }
     type RootMutation{
         createUser(userSaveType: UserSaveType) : User
         updateUser(userUpdateType: UserUpdateType) : User
-        deleteUser : Boolean
-        addPhoto(photoSaveType: PhotoSaveType) : Photo
-        setMainPhoto(_id: ID!) : Photo
-        deletePhoto(_id: ID!) : Boolean
         likeUser(recipientId : ID!) : Like
-        unLikeUser(recipientId: ID!): Boolean
-        sendMessage(sendMessageType: SendMessageType): Message
-        readMessage(messageId: ID!): Message
-        deleteMessage(messageId: ID!): Message  
+        unLikeUser(recipientId: ID!): Boolean 
     }
     schema{
         query: RootQuery

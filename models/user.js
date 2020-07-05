@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
   userName: { type: String, required: true },
   password: { type: String, required: true },
-  gender: { type: String, required: true },
-  dateOfBirth: { type: Date, required: true },
+  gender: { type: String },
+  dateOfBirth: { type: Date },
   knownAs: { type: String },
   created: { type: String },
   lastActive: { type: String },
@@ -26,7 +26,7 @@ const userSchema = new Schema({
       ref: "Like",
     },
   ],
-  likedBy: [
+  likedby: [
     {
       type: Schema.Types.ObjectId,
       ref: "Like",
