@@ -10,13 +10,20 @@ const graphQLResolver = require("./graphql/resolvers");
 var app = express();
 
 app.use(bodyParser.json());
+
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 app.use(isAuth);
 
 const MONGO_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@connect-jo5xp.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
-
-app.post("/login", (req, res) => {
-  console.log("Login Call");
-});
 
 app.use(
   "/graphql",
@@ -30,8 +37,8 @@ app.use(
 mongoose
   .connect(MONGO_URI)
   .then(() => {
-    app.listen(3000, () => {
-      console.log("Listening on PORT 3000");
+    app.listen(4000, () => {
+      console.log("Listening on PORT 4000");
     });
   })
   .catch((err) => {

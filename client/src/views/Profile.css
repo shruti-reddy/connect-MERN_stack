@@ -1,0 +1,82 @@
+.profile-page {
+  width: 100%;
+}
+
+.profile--left {
+  border: 1px solid rgb(16, 159, 255);
+  width: 440px;
+  padding: 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  box-shadow: 0 2rem 2rem rgba(0, 0, 0, 0.2);
+}
+
+.profile--left input {
+  font-family: inherit;
+  width: 100%;
+  background-color: rgba(84, 88, 93, 0.363);
+  color: rgb(236, 233, 233);
+  display: block;
+  margin: none;
+  border: none;
+  height: 1.5rem;
+}
+
+.profile--left textarea {
+  font-family: inherit;
+  height: 3rem;
+  resize: none;
+  width: 100%;
+  background-color: rgba(84, 88, 93, 0.363);
+  color: rgb(236, 233, 233);
+  display: block;
+  margin: none;
+  border: none;
+}
+
+.profile--left h4 {
+  margin-top: 1rem;
+  margin-bottom: 2px;
+  color: rgb(168, 187, 206);
+}
+
+.profile--img-section {
+  margin-top: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+}
+
+.profile--grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  align-items: center;
+  justify-items: start;
+  padding: 2px 10px;
+}
+
+.profile--img__img {
+  margin-top: 4px;
+  object-fit: cover;
+  object-position: center;
+  height: 200px;
+  width: 200px;
+  margin-right: 5px;
+  border-radius: 10px;
+}
+
+.profile--left span {
+  text-align: center;
+}
+
+.profile--buttons {
+  margin-top: 10px;
+  display: flex;
+}
+.profile--button {
+  margin: 3px;
+  width: 60%;
+}

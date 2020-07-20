@@ -1,0 +1,104 @@
+.signup-form {
+  color: white;
+}
+
+.signup-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.5);
+  top: 0;
+  left: 0;
+  z-index: 999;
+}
+
+.signup-form {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  gap: 1rem;
+
+  padding: 1rem 2rem;
+  width: 45%;
+  min-width: 530px;
+  height: 75%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(25, 29, 37);
+  box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.2);
+  border-radius: 1rem;
+}
+
+.display-flex {
+  display: flex;
+  margin-right: 2rem;
+}
+
+.display-flex input {
+  font-family: inherit;
+  margin-right: 6px;
+}
+
+.signup-form select,
+.signup-form option {
+  background-color: inherit;
+  font-family: inherit;
+  color: white;
+  width: 90%;
+}
+
+.signup-form__input--dateOfBirth {
+  grid-column: 1/-1;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.signup-form-control label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.signup-form-control option {
+  color: white;
+  background-color: rgb(31, 42, 54);
+}
+
+.signup-form-control input:not([type="checkbox"]) {
+  background-color: rgba(84, 88, 93, 0.363);
+  color: white;
+  border: none;
+  height: 1.5rem;
+  width: 90%;
+}
+
+.dateOfBirth__container {
+  display: flex;
+}
+
+.dateOfBirth__container * {
+  padding: 2px;
+  width: 90%;
+}
+
+.signup-form__submit > button {
+  width: 80%;
+}
+.signup--close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.signup-form__conditions {
+  display: flex;
+}
+
+.signup-form__conditions input {
+  margin-top: 5px;
+  margin-right: 10px;
+}

@@ -1,0 +1,62 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: rgb(31, 42, 54);
+  color: rgb(223, 219, 219);
+  font-family: "Open Sans", sans-serif;
+}
+
+.main-content {
+  padding: 1rem 4px;
+  margin: 4rem 2.5rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.margin-m-top {
+  margin: 5px 0;
+}
+
+.btn {
+  cursor: pointer;
+  font: inherit;
+  padding: 5px 1rem;
+  text-decoration: none;
+  border: none;
+  display: inline-block;
+  border-radius: 8rem;
+  font-weight: bold;
+  box-shadow: 0 1rem 2rem rgba(black, 0.15);
+  font-family: inherit;
+}
+
+.btn:active,
+.btn:focus {
+  outline: none;
+}
+
+.btn-login {
+  border: 1px solid rgb(16, 159, 255);
+  color: rgb(16, 159, 255);
+  background-color: inherit;
+}
+
+.btn-signup {
+  color: white;
+  background-color: rgb(16, 159, 255);
+}
+
+.btn:disabled {
+  color: white;
+  background-color: rgb(70, 74, 77);
+}
+
+.error-message {
+  color: rgb(168, 63, 63);
+}

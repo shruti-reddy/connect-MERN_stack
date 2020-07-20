@@ -1,0 +1,49 @@
+.user-card {
+  display: inline-block;
+  height: 450px;
+  width: 300px;
+  overflow: hidden;
+  margin: 10px;
+  box-shadow: 0 1rem 2rem rgba(black, 0.15);
+  border: 1px solid rgb(16, 159, 255);
+  padding: 4px;
+  position: relative;
+}
+
+.card--img img {
+  height: 300px;
+  width: 300px;
+  object-fit: cover;
+  transform: scale(1, 1);
+}
+
+.card--details {
+  margin: 10px 0;
+  height: 85px;
+}
+
+.card--details__info {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  list-style: none;
+  justify-items: center;
+}
+
+.card--details__section {
+  width: 100%;
+  background-color: rgba(84, 88, 93, 0.363);
+  padding: 10px;
+}
+
+.card--message {
+  padding: 2px;
+  text-align: center;
+}
+
+.card--like {
+  position: absolute;
+  top: 65%;
+  left: 40%;
+}

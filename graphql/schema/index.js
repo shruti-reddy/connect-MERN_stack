@@ -14,16 +14,21 @@ module.exports = buildSchema(`
         interests: String
         city: String
         country: String
-        photos:  [Photo!]
-        liked: [User!]
-        likedby: [User!]
+        photos(isMain: Boolean):  [Photo!]
+        liked: LikeReturn
+        likedby: LikeReturn
         messagesSent : [Message!]
         messagesReceived: [Message!]
+    }
+    type LikeReturn {
+        count: Int!
+        likes : [User!]
     }
     type AuthData {
         userId: ID!
         token: String!
         tokenExpiration: Int!
+        userName: String!
     }
     type Photo{
         _id: ID!
@@ -81,8 +86,8 @@ module.exports = buildSchema(`
         content:String
     }
     type RootQuery{
-        users: [User!]!
-        photos: [Photo!]
+        users(userId: String): [User!]!
+        photos(isMain: Boolean): [Photo!]
         likes: [Like!]
         messages: [Message!]
         login(userName: String!, password: String!): AuthData!
