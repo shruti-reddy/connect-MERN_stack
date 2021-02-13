@@ -1,19 +1,27 @@
 import React, { Component } from "react";
+import { NavLink } from "react-router-dom";
+import ProfileCard from "../components/ProfileCard/ProfileCard";
+
 import "./Profile.css";
 
 class ProfilePage extends Component {
+  _isMounted = false;
   constructor(props) {
     super(props);
     this.state = {
       user: {},
     };
+    if (this.props.path === "/profile/:id") {
+      // this.props.history.push(`${this.props.url}/photos`);
+    }
   }
+
   getUser = () => {
-    const userId = this.props.match.params.id;
     const requestBody = {
       query: `
       {
-        users(userId: "${userId}"){
+        users(userId: "${this.state.userId}"){
+          _id
           userName
           city
           country
@@ -39,16 +47,19 @@ class ProfilePage extends Component {
       `,
     };
 
-    fetch("http://localhost:4000/graphql", {
+    fetch("/graphql", {
       method: "POST",
       body: JSON.stringify(requestBody),
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer context user`,
       },
     })
       .then((r) => r.json())
       .then((data) => {
-        this.setState({ user: data.data.users[0] });
+        if (this._isMounted) {
+          this.setState({ user: data.data.users[0] });
+        }
       });
   };
 
@@ -60,110 +71,68 @@ class ProfilePage extends Component {
     console.log(`sending message to ${this.state.user.userName}`);
   };
 
+  static getDerivedStateFromProps(nextProps) {
+    return {
+      userId: nextProps.computedMatch.params.id,
+    };
+  }
+
   componentDidMount() {
+    this._isMounted = true;
     this.getUser();
   }
+
+  componentDidUpdate(_, prevState) {
+    if (prevState.userId !== this.state.userId) {
+      this.getUser();
+    }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   render() {
-    console.log(this.state.user);
     return (
       <div>
         {this.state.user.userName ? (
           <div className="profile-page">
             <div className="profile--left">
-              <div className="profile--name">
-                <span>KnownAs : {this.state.user.knownAs}</span>
-              </div>
-              <div className="profile--img-section">
-                <img
-                  className="profile--img__img"
-                  src={
-                    this.state.user.photos.length > 0
-                      ? this.state.user.photos[0].url
-                      : require("../assets/unknown-user.png")
-                  }
-                  alt={this.state.user.userName}
-                />
-                <div className="profile--grid">
-                  <div>
-                    <h4>Followers</h4>
-                    <span>{this.state.user.likedby.count}</span>
-                  </div>
-                  <div className="profile--followers__following">
-                    <h4>Following</h4>
-                    <span>{this.state.user.liked.count}</span>
-                  </div>
-                  <div>
-                    <h4>City</h4>
-                    <span>{this.state.user.city}</span>
-                  </div>
-                  <div className="profile--location__country">
-                    <h4>Country</h4>
-                    <span>{this.state.user.country}</span>
-                  </div>
-                  <div className="profile--location__last-active">
-                    <h4>Last Active</h4>
-                    <span>
-                      {this.state.user.lastActive
-                        ? this.state.user.lastActive
-                        : "Unknown"}
-                    </span>
-                  </div>
-                  <div className="profile--location__created-at">
-                    <h4>Created At</h4>
-                    <span>
-                      {this.state.user.createdAt
-                        ? this.state.user.createdAt
-                        : "Unknown"}
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div className="profile--details">
-                <div className="profile--introduction">
-                  <h4>Introduction</h4>
-                  <textarea
-                    type="text"
-                    readOnly
-                    value={this.state.user.introduction}
-                  />
-                </div>
-                <div className="profile--looking-for">
-                  <h4>Looking For </h4>
-                  <input
-                    type="text"
-                    readOnly
-                    value={this.state.user.lookingFor}
-                  />
-                </div>
-                <div className="profile--interests">
-                  <h4>Interests</h4>
-                  <input
-                    type="text"
-                    readOnly
-                    value={this.state.user.interests}
-                  />
-                </div>
-                <div className="profile--buttons">
-                  <button
-                    onClick={this.likeUser}
-                    className="btn profile--button"
-                  >
-                    Like
-                  </button>
-                  <button
-                    onClick={this.sendMessage}
-                    className="btn profile--button"
-                  >
-                    Message
-                  </button>
-                </div>
-              </div>
+              <ProfileCard
+                user={this.state.user}
+                likeUser={this.likeUser}
+                sendMessage={this.sendMessage}
+              />
             </div>
-            <div className="profile--right"></div>
+            <div className="profile--right">
+              <ul className="profile--right__header">
+                <li>
+                  <NavLink to={`${this.props.computedMatch.url}/photos`}>
+                    Photos
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to={`${this.props.computedMatch.url}/followers`}>
+                    Followers
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to={`${this.props.computedMatch.url}/following`}>
+                    Following
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to={`${this.props.computedMatch.url}/messages`}>
+                    Messages
+                  </NavLink>
+                </li>
+              </ul>
+              <div className="profile--right__main">{this.props.children}</div>
+            </div>
           </div>
         ) : (
-          <div>Loading...</div>
-        )}
+            <div>Loading...</div>
+          )}
       </div>
     );
   }

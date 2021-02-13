@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Card from "../components/Card/Card";
+import getAllUsers from '../graphql/get-all-users';
 
 class MatchesPage extends Component {
   constructor(props) {
@@ -9,41 +10,46 @@ class MatchesPage extends Component {
     };
   }
 
-  componentDidMount() {
-    const requestBody = {
-      query: `
-      {
-        users{
-          _id
-          userName
-          city
-          country
-          liked {
-            count
-          }
-          likedby {
-            count
-          }
-          photos(isMain: true) {
-            url
-          }
-        }
-      }
-      `,
-    };
+  // const requestBody = {
+  //   query: `
+  //   {
+  //     users{
+  //       _id
+  //       userName
+  //       city
+  //       country
+  //       liked {
+  //         count
+  //       }
+  //       likedby {
+  //         count
+  //       }
+  //       photos(isMain: true) {
+  //         url
+  //       }
+  //     }
+  //   }
+  //   `,
+  // };
 
-    fetch("http://localhost:4000/graphql", {
-      method: "POST",
-      body: JSON.stringify(requestBody),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((r) => r.json())
-      .then((data) => {
-        this.setState({ users: data.data.users });
-      });
+  // fetch("/graphql", {
+  //   method: "POST",
+  //   body: JSON.stringify(requestBody),
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  // })
+  //   .then((r) => r.json())
+  //   .then((data) => {
+  //     console.log(data.data.users);
+  //     this.setState({ users: data.data.users });
+  //   });
+  componentDidMount() {
+    getAllUsers().then(res => {
+      this.setState({ users: res.data.data.users });
+    });
   }
+
   render() {
     return (
       <div>

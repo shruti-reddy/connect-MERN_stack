@@ -3,10 +3,12 @@ const { Photo, User } = require("../../models");
 const bindUser = require("./bind-user");
 
 module.exports = {
-  photos: async (args) => {
-    const returnMain = args.isMain ? args.isMain : false;
+  photos: async (args, req) => {
+    if (!req.isAuth) {
+      throw new Error("User is not authenticated");
+    }
     try {
-      const photos = await Photo.find({ isMain: returnMain });
+      const photos = await Photo.find({ user: args.userId });
       return photos.map((photo) => {
         return {
           ...photo._doc,

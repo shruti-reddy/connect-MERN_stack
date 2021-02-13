@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const expressGraphQL = require("express-graphql");
+const path = require("path");
 
 const mongoose = require("mongoose");
 const isAuth = require("./middleware/is-auth");
@@ -25,19 +26,39 @@ app.use(isAuth);
 
 const MONGO_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@connect-jo5xp.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
 
+const { errorType } = require('./constants')
+
+const getErrorCode = errorName => {
+  return errorType[errorName]
+}
+
 app.use(
-  "/graphql",
-  expressGraphQL({
-    schema: graphQLSchema,
-    rootValue: graphQLResolver,
-    graphiql: true,
-  })
-);
+  "/graphql", (req, res) => {
+    expressGraphQL({
+      schema: graphQLSchema,
+      rootValue: graphQLResolver,
+      graphiql: true,
+      context: { req },
+      // customFormatErrorFn: (err) => {
+      //   const error = getErrorCode(err.message)
+      //   return ({ message: error.message, statusCode: error.statusCode })
+      // }
+    })(req, res)
+  });
+
+// Serve static assets if in production
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
 
 mongoose
-  .connect(MONGO_URI)
+  .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
-    app.listen(4000, () => {
+    app.listen(process.env.PORT || 4000, () => {
       console.log("Listening on PORT 4000");
     });
   })

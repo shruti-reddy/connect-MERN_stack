@@ -3,7 +3,6 @@ const Schema = mongoose.Schema;
 
 const photoSchema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: "User" },
-  // userId: { type: String, required: true },
   url: { type: String, required: true },
   description: { type: String },
   dateAdded: { type: String, default: new Date() },

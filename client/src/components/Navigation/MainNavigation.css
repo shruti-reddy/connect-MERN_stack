@@ -16,6 +16,12 @@
   margin: 0;
   font-size: 1.5rem;
   color: white;
+  margin-right: 15px;
+}
+
+.main-navigation__total-items {
+  display: flex;
+  flex-direction: row;
 }
 
 .main-navigation__items {
@@ -55,6 +61,7 @@
 }
 
 .user-photo {
+  margin-left: auto;
   display: flex;
 }
 .user-photo img {

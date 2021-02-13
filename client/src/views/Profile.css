@@ -1,11 +1,12 @@
 .profile-page {
   width: 100%;
+  display: flex;
 }
 
 .profile--left {
   border: 1px solid rgb(16, 159, 255);
   width: 440px;
-  padding: 1rem 1.5rem;
+  padding: 10px 1rem;
   display: flex;
   flex-direction: column;
   border-radius: 10px;
@@ -36,7 +37,7 @@
 }
 
 .profile--left h4 {
-  margin-top: 1rem;
+  margin-top: 5px;
   margin-bottom: 2px;
   color: rgb(168, 187, 206);
 }
@@ -59,7 +60,6 @@
 }
 
 .profile--img__img {
-  margin-top: 4px;
   object-fit: cover;
   object-position: center;
   height: 200px;
@@ -79,4 +79,29 @@
 .profile--button {
   margin: 3px;
   width: 60%;
+}
+
+.profile--right {
+  margin-left: 10px;
+  padding: 5px;
+  flex-grow: 1;
+}
+
+.profile--right__header {
+  margin: 10px auto;
+  width: 75%;
+  height: 20px;
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+}
+
+.profile--right__header a {
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.profile--right__main {
+  padding: 10px;
 }

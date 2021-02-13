@@ -5,6 +5,7 @@ const { ObjectID } = require("mongodb");
 
 const { User, Photo, Like, Message } = require("../../models");
 const bindUser = require("./bind-user");
+const { errorName } = require('../../constants')
 
 const bindUsers = async (userIds) => {
   try {
@@ -13,6 +14,11 @@ const bindUsers = async (userIds) => {
       return {
         ...user._doc,
         _id: user.id,
+        photos: bindPhotos.bind(this, user.photos),
+        liked: bindLikes.bind(this, user.liked),
+        likedby: bindLikes.bind(this, user.likedby),
+        messagesSent: bindMessage.bind(this, user.messagesSent),
+        messagesReceived: bindMessage.bind(this, user.messagesReceived),
       };
     });
   } catch (err) {
@@ -84,33 +90,38 @@ module.exports = {
     }
   },
   login: async ({ userName, password }) => {
-    const user = await User.findOne({ userName });
-    if (!user) {
-      throw new Error("User does not exist");
-    }
-    const isEqual = await bcrypt.compare(password, user.password);
-    if (!isEqual) {
-      throw new Error("Password is incorrect");
-    }
-    const photo = await Photo.findOne({
-      user: user._id,
-      isMain: true,
-    });
-    const token = jwt.sign(
-      {
+    try {
+      const user = await User.findOne({ userName });
+      if (!user) {
+        throw new Error("user doesn't exist");
+      }
+      const isEqual = await bcrypt.compare(password, user.password);
+      if (!isEqual) {
+        throw new Error("password is incorrect");
+      }
+      const photo = await Photo.findOne({
+        user: user._id,
+        isMain: true,
+      });
+      const token = jwt.sign(
+        {
+          userId: user._id,
+          userName: user.userName,
+          userPhoto: photo ? photo.url : "",
+        },
+        process.env.SECRET_KEY,
+        { expiresIn: "1h" }
+      );
+      return {
         userId: user._id,
         userName: user.userName,
-        userPhoto: photo ? photo.url : "",
-      },
-      process.env.SECRET_KEY,
-      { expiresIn: "1h" }
-    );
-    return {
-      userId: user._id,
-      userName: user.userName,
-      token: token,
-      tokenExpiration: 1,
-    };
+        token: token,
+        tokenExpiration: 1,
+      };
+    }
+    catch (err) {
+      throw err
+    }
   },
   createUser: async ({ userSaveType }) => {
     try {

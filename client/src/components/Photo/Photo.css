@@ -1,0 +1,28 @@
+.photo__container {
+  display: inline-block;
+  height: 380px;
+  width: 300px;
+  overflow: hidden;
+  margin: 10px;
+  box-shadow: 0 1rem 1rem rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+}
+
+.photo__img img {
+  height: 300px;
+  width: 300px;
+  object-fit: cover;
+  object-position: center;
+}
+
+.photo__details {
+  padding: 5px;
+  margin-top: 2px;
+  overflow: hidden;
+}
+
+.photo__description {
+  white-space: wrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
