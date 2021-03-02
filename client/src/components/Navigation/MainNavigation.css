@@ -75,9 +75,10 @@
 }
 
 .dropdown {
-  position: relative;
   display: inline-block;
-  margin-right: 50px;
+  position: absolute;
+  top: 0;
+  right: 65px;
 }
 
 .dropdown-content {

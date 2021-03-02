@@ -155,11 +155,11 @@ module.exports = {
     }
   },
   updateUser: async ({ userUpdateType }, req) => {
-    if (!req.isAuth) {
+    if (!req.req.isAuth) {
       throw new Error("User is not authenticated");
     }
     const userFound = await User.findOne({
-      _id: req.userId,
+      _id: req.req.userId,
     });
     if (!userFound) {
       throw new Error("user doesn't exist");
@@ -175,13 +175,16 @@ module.exports = {
     });
 
     const result = await User.findByIdAndUpdate(
-      ObjectID(req.userId),
+      ObjectID(req.req.userId),
       { $set: diffuser },
       { new: true }
     );
     return {
       ...result._doc,
       password: null,
+      photos: bindPhotos.bind(this, userFound.photos),
+      liked: bindLikes.bind(this, userFound.liked),
+      likedby: bindLikes.bind(this, userFound.likedby)
     };
   },
   deleteUser: async (req) => {

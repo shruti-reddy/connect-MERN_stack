@@ -38,7 +38,6 @@ module.exports = buildSchema(`
         password: String!
     }
     input UserUpdateType{
-        _id: ID!
         userName: String
         gender: String
         dateOfBirth: String

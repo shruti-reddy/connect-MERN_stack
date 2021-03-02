@@ -39,10 +39,6 @@ app.use(
       rootValue: graphQLResolver,
       graphiql: true,
       context: { req },
-      // customFormatErrorFn: (err) => {
-      //   const error = getErrorCode(err.message)
-      //   return ({ message: error.message, statusCode: error.statusCode })
-      // }
     })(req, res)
   });
 

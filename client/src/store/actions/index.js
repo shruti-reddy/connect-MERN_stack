@@ -2,5 +2,6 @@ export {
     registerUser,
     loginUser,
     setCurrentUser,
-    logoutUser
+    logoutUser,
+    checkAuthState
 } from './authActions';

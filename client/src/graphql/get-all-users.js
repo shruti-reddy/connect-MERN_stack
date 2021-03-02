@@ -24,7 +24,6 @@ const requestBody = {
 
 const getAllUsers = async () => {
   const users = await axios.post('/graphql', requestBody);
-  console.log(users)
   return users;
 }
 

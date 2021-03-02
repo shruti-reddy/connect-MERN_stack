@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter, Redirect, Route, Switch, withRouter } from "react-router-dom";
+import { Redirect, Route, Switch, withRouter } from "react-router-dom";
 import { connect } from 'react-redux'
 import jwt_decode from "jwt-decode";
 
@@ -26,11 +26,7 @@ class App extends Component {
 
   componentDidMount() {
     // axios.defaults.headers.common["Content-Type"] = "application/json";
-    const token = localStorage.getItem("jwtToken");
-    if (token) {
-      const decoded = jwt_decode(token);
-      this.props.onSetUserToken(decoded);
-    }
+    this.props.onCheckAuthState();
   }
 
   render() {
@@ -54,11 +50,39 @@ class App extends Component {
             <Route exact path="/signup" component={SignUp} />
             <PrivateRoute exact path="/matches" component={MatchesPage} />
             <PrivateRoute exact path="/messages" component={MessagesPage} />
-            <PrivateRoute path="/myprofile" component={EditProfilePage} />
+            <PrivateRoute
+              path="/myprofile"
+              component={(props) => {
+                return (
+                  <div>
+                    <EditProfilePage {...props}>
+                      <Switch>
+                        <Route
+                          path={`${props.path}/followers`}
+                          component={Followers}
+                        />
+                        <Route
+                          path={`${props.path}/following`}
+                          component={Following}
+                        />
+                        <Route
+                          path={`${props.path}/photos`}
+                          component={(props) => <Photos {...props} />}
+                        />
+                        <Route
+                          path={`${props.path}/messages`}
+                          component={Messages}
+                        />
+                      </Switch>
+                    </EditProfilePage>
+                  </div>
+                )
+              }}
+            />
             <PrivateRoute
               path="/profile/:id"
               component={(props) => {
-                console.log(props); return (
+                return (
                   <div>
                     <ProfilePage {...props}>
                       <Switch>
@@ -84,6 +108,7 @@ class App extends Component {
                 )
               }}
             />
+
           </Switch>
         </main>
       </React.Fragment>
@@ -99,7 +124,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onSetUserToken: (decodedToken) => dispatch(actions.setCurrentUser(decodedToken))
+    onSetUserToken: (decodedToken) => dispatch(actions.setCurrentUser(decodedToken)),
+    onCheckAuthState: () => dispatch(actions.checkAuthState)
   }
 }
 

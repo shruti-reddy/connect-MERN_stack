@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
 import Card from "../Card/Card";
 
 class Following extends Component {
@@ -10,7 +11,7 @@ class Following extends Component {
   }
 
   componentDidMount() {
-    const userId = this.props.match.params.id;
+    const userId = this.props.match.params.id || this.props.userId;
     const requestBody = {
       query: `
       {
@@ -64,4 +65,10 @@ class Following extends Component {
   }
 }
 
-export default Following;
+const mapStateToProps = state => {
+  return {
+    userId: state.auth.user.userId
+  }
+}
+
+export default connect(mapStateToProps)(Following);

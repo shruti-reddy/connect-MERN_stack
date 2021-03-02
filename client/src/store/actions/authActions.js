@@ -5,7 +5,6 @@ import jwt_decode from "jwt-decode";
 import { GET_ERRORS, SET_CURRENT_USER } from "./types";
 
 import login from '../../graphql/login';
-import getAllUsers from '../../graphql/get-all-users'
 
 // Register User
 export const registerUser = (userData, history) => (dispatch) => {
@@ -36,6 +35,9 @@ export const loginUser = (userName, password) => {
       const decoded = jwt_decode(token);
       // Set current user
       dispatch(setCurrentUser(decoded));
+      console.log(decoded);
+      //create timer to logout user after token expires
+      dispatch(checkAuthTimeout(decoded.exp));
     }
     catch (err) {
       console.log(err)
@@ -45,6 +47,35 @@ export const loginUser = (userName, password) => {
       // })
     };
   }
+};
+
+export const checkAuthState = () => {
+  return dispatch => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      dispatch(logoutUser());
+    }
+    else {
+      const decoded = jwt_decode(token);
+      const expirationDate = new Date(new Date().getTime() + decoded.exp * 1000);
+      if (expirationDate <= new Date()) {
+        dispatch(logoutUser());
+      }
+      else {
+        const userId = localStorage.getItem('userId');
+        dispatch(setCurrentUser(decoded));
+        dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000))
+      }
+    }
+  }
+}
+
+export const checkAuthTimeout = (expirationTime) => {
+  return dispatch => {
+    setTimeout(() => {
+      dispatch(logoutUser());
+    }, expirationTime * 1000);
+  };
 };
 
 // Set logged in user
