@@ -110,7 +110,7 @@ module.exports = {
           userPhoto: photo ? photo.url : "",
         },
         process.env.SECRET_KEY,
-        { expiresIn: "1h" }
+        { expiresIn: 60 * 60 }
       );
       return {
         userId: user._id,

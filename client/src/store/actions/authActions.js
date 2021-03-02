@@ -35,9 +35,8 @@ export const loginUser = (userName, password) => {
       const decoded = jwt_decode(token);
       // Set current user
       dispatch(setCurrentUser(decoded));
-      console.log(decoded);
       //create timer to logout user after token expires
-      dispatch(checkAuthTimeout(decoded.exp));
+      dispatch(checkAuthTimeout(decoded.exp - decoded.iat));
     }
     catch (err) {
       console.log(err)
@@ -50,19 +49,19 @@ export const loginUser = (userName, password) => {
 };
 
 export const checkAuthState = () => {
+  console.log('checking the auth state')
   return dispatch => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('jwtToken');
     if (!token) {
       dispatch(logoutUser());
     }
     else {
       const decoded = jwt_decode(token);
-      const expirationDate = new Date(new Date().getTime() + decoded.exp * 1000);
+      const expirationDate = new Date(new Date().getTime() + (decoded.exp / 1000));
       if (expirationDate <= new Date()) {
         dispatch(logoutUser());
       }
       else {
-        const userId = localStorage.getItem('userId');
         dispatch(setCurrentUser(decoded));
         dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000))
       }
@@ -71,15 +70,17 @@ export const checkAuthState = () => {
 }
 
 export const checkAuthTimeout = (expirationTime) => {
+  console.log('check auth timeout', expirationTime * 1000)
   return dispatch => {
     setTimeout(() => {
       dispatch(logoutUser());
-    }, expirationTime * 1000);
+    }, 3600 * 1000);
   };
 };
 
 // Set logged in user
 export const setCurrentUser = (decoded) => {
+  console.log('set current user')
   return {
     type: SET_CURRENT_USER,
     payload: decoded,
@@ -88,6 +89,7 @@ export const setCurrentUser = (decoded) => {
 
 // Log user out
 export const logoutUser = () => (dispatch) => {
+  console.log('log out user')
   // Remove token from localStorage
   localStorage.removeItem("jwtToken");
   // Remove auth header for future requests

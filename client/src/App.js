@@ -125,7 +125,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     onSetUserToken: (decodedToken) => dispatch(actions.setCurrentUser(decodedToken)),
-    onCheckAuthState: () => dispatch(actions.checkAuthState)
+    onCheckAuthState: () => dispatch(actions.checkAuthState())
   }
 }
 
