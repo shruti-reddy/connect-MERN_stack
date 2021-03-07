@@ -14,8 +14,8 @@ var app = express();
 
 app.use(bodyParser.json({ extended: true, limit: '50mb' }));
 
+// app.use(cors("http://localhost:3000"))
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   if (req.method === "OPTIONS") {
@@ -23,8 +23,6 @@ app.use((req, res, next) => {
   }
   next();
 });
-
-app.use(cors("http://localhost:3000"))
 
 app.use(isAuth);
 
@@ -52,9 +50,9 @@ app.post('/getCloudinaryUrl', (req, res) => {
 
 getCloudinaryUrl = async (req, res) => {
   cloudinary.config({
-    cloud_name: "dm9yvtly1",
-    api_key: "432831266699842",
-    api_secret: "gdYrW7-0RmH_MsiGIyRx1GNcz38"
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.API_KEY,
+    api_secret: process.env.API_SECRET
   })
   try {
     const fileStr = req.body.data;

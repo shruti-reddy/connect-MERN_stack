@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import axios from "axios";
 
 import addPhoto from "../../graphql/addPhoto";
 import getUserPhotos from "../../graphql/get-user-photos";
@@ -11,7 +10,7 @@ class PhotoEditor extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            photos: [],
+            photos: null,
             selectedFile: null,
             fileInputState: '',
             previewSource: '',
@@ -24,14 +23,12 @@ class PhotoEditor extends Component {
     }
 
     componentDidUpdate() {
-        if (this.props.user.userId && this.state.photos.length === 0) this.getPhotos();
+        if (this.props.user.userId && this.state.photos === null) this.getPhotos();
     }
 
     getPhotos = async () => {
-        console.log(this.props.user.token)
         const photos = await getUserPhotos(this.props.user.userId, this.props.user.token);
         this.setState({ photos: photos.data.photos });
-        console.log(photos.data.photos)
     }
 
     handleFileInputChange = (e) => {
@@ -81,7 +78,6 @@ class PhotoEditor extends Component {
             const res = await addPhoto(this.props.token, photoData);
             const photos = [...this.state.photos];
             photos.push(res.data.addPhoto);
-            console.log(photos)
             this.setState({ photos })
         } catch (err) {
             console.error(err);
@@ -97,21 +93,19 @@ class PhotoEditor extends Component {
         console.log('delete photo')
     }
 
-    onChangeHandler = event => {
-        console.log(event.target.files[0])
-        this.setState(
-            {
-                selectedFile: event.target.files[0],
-                loaded: 0,
-            }
-        )
-    }
-    onClickHandler = async () => {
-        const data = new FormData();
-        data.append('file', this.state.selectedFile);
-        const photoUrl = await axios.post("http://localhost:4000/getCloudinaryUrl", data, {})
-        console.log(photoUrl)
-    }
+    // onChangeHandler = event => {
+    //     this.setState(
+    //         {
+    //             selectedFile: event.target.files[0],
+    //             loaded: 0,
+    //         }
+    //     )
+    // }
+    // onClickHandler = async () => {
+    //     const data = new FormData();
+    //     data.append('file', this.state.selectedFile);
+    //     const photoUrl = await axios.post("http://localhost:4000/getCloudinaryUrl", data, {})
+    // }
 
     render() {
         return (

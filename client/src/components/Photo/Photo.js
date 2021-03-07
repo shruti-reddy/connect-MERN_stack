@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import moment from "moment";
+// import moment from "moment";
 import "./Photo.css";
 
 class Photo extends Component {
@@ -12,7 +12,7 @@ class Photo extends Component {
             alt={this.props.photo.user.userName}
           />
         </div>
-        <div className="photo__details">
+        {/* <div className="photo__details">
           {this.props.photo.description && (
             <p className="photo__description">
               <strong>{this.props.photo.user.userName}: </strong>
@@ -22,7 +22,7 @@ class Photo extends Component {
           <p>
             <strong>Created: </strong> {moment(this.props.photo.dateAdded).fromNow()}
           </p>
-        </div>
+        </div> */}
         <div className="photo-buttons">
           <button
             type="button"
