@@ -7,7 +7,7 @@ const updateUser = async (token, user) => {
                     userName
                     gender
                     dateOfBirth   
-                    knownAs 
+                    knownAs
                     created
                     lastActive
                     introduction

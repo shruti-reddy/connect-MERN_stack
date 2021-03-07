@@ -1,10 +1,13 @@
-const { Photo, User } = require("../../models");
+// const cloudinary = require("cloudinary").v2;
 
+const { Photo, User } = require("../../models");
 const bindUser = require("./bind-user");
+
+
 
 module.exports = {
   photos: async (args, req) => {
-    if (!req.isAuth) {
+    if (!req.req.isAuth) {
       throw new Error("User is not authenticated");
     }
     try {
@@ -21,15 +24,15 @@ module.exports = {
     }
   },
   addPhoto: async (args, req) => {
-    if (!req.isAuth) {
+    if (!req.req.isAuth) {
       throw new Error("User is not authenticated");
     }
     try {
       const userPhotoFound = await Photo.findOne({
-        user: req.userId,
+        user: req.req.userId,
       });
       const photo = new Photo({
-        user: req.userId,
+        user: req.req.userId,
         url: args.photoSaveType.url,
         description: args.photoSaveType.description,
       });
@@ -37,7 +40,10 @@ module.exports = {
         photo.isMain = true;
       }
       const result = await photo.save();
-      const user = await User.findById(req.userId);
+      const user = await User.findById(req.req.userId);
+      if (!user.photos) {
+        user.photos = [];
+      }
       user.photos.push(result.id);
       await user.save();
       return {

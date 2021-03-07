@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const expressGraphQL = require("express-graphql");
 const path = require("path");
+const cloudinary = require("cloudinary").v2;
+const cors = require('cors')
 
 const mongoose = require("mongoose");
 const isAuth = require("./middleware/is-auth");
@@ -10,7 +12,7 @@ const graphQLResolver = require("./graphql/resolvers");
 
 var app = express();
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({ extended: true, limit: '50mb' }));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -21,6 +23,8 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+app.use(cors("http://localhost:3000"))
 
 app.use(isAuth);
 
@@ -41,6 +45,26 @@ app.use(
       context: { req },
     })(req, res)
   });
+
+app.post('/getCloudinaryUrl', (req, res) => {
+  getCloudinaryUrl(req, res);
+});
+
+getCloudinaryUrl = async (req, res) => {
+  cloudinary.config({
+    cloud_name: "dm9yvtly1",
+    api_key: "432831266699842",
+    api_secret: "gdYrW7-0RmH_MsiGIyRx1GNcz38"
+  })
+  try {
+    const fileStr = req.body.data;
+    const uploadResponse = await cloudinary.uploader.upload(fileStr);
+    res.json({ photoUrl: uploadResponse.url });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ err: 'Something went wrong' });
+  }
+}
 
 // Serve static assets if in production
 if (process.env.NODE_ENV === "production") {

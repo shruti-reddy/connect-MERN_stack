@@ -1,6 +1,6 @@
 .photo__container {
   display: inline-block;
-  height: 380px;
+  height: 400px;
   width: 300px;
   overflow: hidden;
   margin: 10px;
@@ -25,4 +25,16 @@
   white-space: wrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.photo-buttons {
+  display: flex;
+}
+
+.main_button {
+  margin-left: 5px;
+}
+
+.delete_button{
+  margin-right: 5px;
 }

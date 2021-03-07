@@ -221,8 +221,8 @@ class EditProfilePage extends Component {
             </div>
           </div>
         ) : (
-            <div>Loading...</div>
-          )}
+          <div>Loading...</div>
+        )}
       </div>
     );
   }

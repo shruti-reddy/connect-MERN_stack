@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+
 import Photo from "../Photo/Photo";
 
 class Photos extends Component {
@@ -10,6 +11,7 @@ class Photos extends Component {
   }
 
   componentDidMount() {
+    const token = localStorage.getItem('jwtToken');
     const requestBody = {
       query: `
       {
@@ -32,7 +34,7 @@ class Photos extends Component {
       body: JSON.stringify(requestBody),
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer context token`,
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((r) => r.json())
@@ -56,5 +58,7 @@ class Photos extends Component {
     );
   }
 }
+
+
 
 export default Photos;

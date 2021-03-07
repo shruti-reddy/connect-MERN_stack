@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Redirect, Route, Switch, withRouter } from "react-router-dom";
 import { connect } from 'react-redux'
-import jwt_decode from "jwt-decode";
 
 import AuthPage from "./views/Auth";
 import MatchesPage from "./views/Matches";
@@ -18,6 +17,7 @@ import Followers from "./components/Followers/Followers";
 import Following from "./components/Following/Following";
 import Messages from "./components/Messages/Messages";
 import Photos from "./components/Photos/Photos";
+import PhotoEditor from "./components/Photo_editor/Photo_editor";
 import * as actions from './store/actions/index';
 
 import "./App.css";
@@ -67,7 +67,7 @@ class App extends Component {
                         />
                         <Route
                           path={`${props.path}/photos`}
-                          component={(props) => <Photos {...props} />}
+                          component={(props) => <PhotoEditor {...props} />}
                         />
                         <Route
                           path={`${props.path}/messages`}
@@ -108,7 +108,6 @@ class App extends Component {
                 )
               }}
             />
-
           </Switch>
         </main>
       </React.Fragment>

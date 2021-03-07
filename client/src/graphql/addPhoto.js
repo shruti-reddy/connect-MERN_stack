@@ -1,29 +1,32 @@
-import axios from "axios";
-
-const requestBody = {
-    query: `{
-        mutation addPhotomutation($photo: PhotoSaveType) {
-            addPhoto(photoSaveType: $photo) {
-                _id
-                url
-                description
-                dateAdded
-                isMain
-            }
+const addPhoto = async (token, photoData) => {
+    const requestBody = {
+        query: `
+            mutation addPhotomutation($photo: PhotoSaveType) {
+                addPhoto(photoSaveType: $photo) {
+                    url
+                    description
+                    dateAdded
+                    isMain
+                    user{
+                        userName
+                        _id
+                    }
+                }
+            }`,
+        variables: {
+            "photo": photoData
         }
-    }`,
-    variables: {
-        photo: `{
-            "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_CLzjT17aiO7TJpwjqmG04E9XpgCUfhC2NA&usqp=CAU",
-                "description": "monica"
-        }`,
-    }
-};
-
-
-const updateUser = async () => {
-    const updatedUser = await axios.post('/graphql', requestBody);
-    return updatedUser;
+    };
+    const res = await fetch("/graphql", {
+        method: "POST",
+        body: JSON.stringify(requestBody),
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+    })
+    const data = await res.json();
+    return data;
 }
 
-export default updateUser;
+export default addPhoto;

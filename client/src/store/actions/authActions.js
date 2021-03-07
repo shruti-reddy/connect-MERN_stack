@@ -34,7 +34,7 @@ export const loginUser = (userName, password) => {
       // Decode token to get user data
       const decoded = jwt_decode(token);
       // Set current user
-      dispatch(setCurrentUser(decoded));
+      dispatch(setCurrentUser({ ...decoded, token: token }));
       //create timer to logout user after token expires
       dispatch(checkAuthTimeout(decoded.exp - decoded.iat));
     }
@@ -49,7 +49,6 @@ export const loginUser = (userName, password) => {
 };
 
 export const checkAuthState = () => {
-  console.log('checking the auth state')
   return dispatch => {
     const token = localStorage.getItem('jwtToken');
     if (!token) {
@@ -62,7 +61,7 @@ export const checkAuthState = () => {
         dispatch(logoutUser());
       }
       else {
-        dispatch(setCurrentUser(decoded));
+        dispatch(setCurrentUser({ ...decoded, token: token }));
         dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000))
       }
     }
@@ -70,7 +69,6 @@ export const checkAuthState = () => {
 }
 
 export const checkAuthTimeout = (expirationTime) => {
-  console.log('check auth timeout', expirationTime * 1000)
   return dispatch => {
     setTimeout(() => {
       dispatch(logoutUser());
@@ -80,7 +78,6 @@ export const checkAuthTimeout = (expirationTime) => {
 
 // Set logged in user
 export const setCurrentUser = (decoded) => {
-  console.log('set current user')
   return {
     type: SET_CURRENT_USER,
     payload: decoded,
@@ -89,7 +86,6 @@ export const setCurrentUser = (decoded) => {
 
 // Log user out
 export const logoutUser = () => (dispatch) => {
-  console.log('log out user')
   // Remove token from localStorage
   localStorage.removeItem("jwtToken");
   // Remove auth header for future requests

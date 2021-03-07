@@ -1,6 +1,4 @@
-import axios from "axios";
-
-export default getUserPhotos = async (userId) => {
+const getUserPhotos = async (userId, token) => {
   const requestBody = {
     query: `
         {
@@ -17,6 +15,15 @@ export default getUserPhotos = async (userId) => {
         }
         `,
   };
-  const userPhotos = await axios.post("/graphql", requestBody);
+  const userPhotos = await fetch("/graphql", {
+    method: "POST",
+    body: JSON.stringify(requestBody),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  })
   return userPhotos.json();
 };
+
+export default getUserPhotos;
