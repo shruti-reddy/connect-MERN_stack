@@ -62,7 +62,7 @@ class PhotoEditor extends Component {
 
     uploadImage = async (base64EncodedImage) => {
         try {
-            const addPhotoResponse = await fetch('http://localhost:4000/getCloudinaryUrl', {
+            const addPhotoResponse = await fetch('/getCloudinaryUrl', {
                 method: 'POST',
                 body: JSON.stringify({ data: base64EncodedImage }),
                 headers: { 'Content-Type': 'application/json' },

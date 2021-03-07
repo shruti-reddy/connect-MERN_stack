@@ -13,7 +13,7 @@ const login = async (user, password) => {
         }
         `,
   };
-  const loginData = await axios.post("http://localhost:4000/graphql", requestBody);
+  const loginData = await axios.post("/graphql", requestBody);
   return loginData.data;
 };
 
