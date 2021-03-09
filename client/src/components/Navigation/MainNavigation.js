@@ -10,7 +10,6 @@ class MainNavigation extends Component {
   onHome = () => { };
 
   logout = () => {
-    console.log('logout clicked')
     this.props.onLogoutUser();
     this.props.history.push("/auth");
   }
@@ -58,7 +57,7 @@ class MainNavigation extends Component {
           {this.props.isAuthenticated && <div className="user-photo dropdown">
             <img
               className="dropbtn"
-              src={require("../../assets/unknown-user.png")}
+              src={this.props.user.userPhoto || require("../../assets/unknown-user.png")}
               alt={"context username"}
             />
             <div className="dropdown-content">
@@ -82,6 +81,7 @@ class MainNavigation extends Component {
 
 const mapStateToProps = state => {
   return {
+    user: state.auth.user,
     isAuthenticated: state.auth.isAuthenticated
   }
 }

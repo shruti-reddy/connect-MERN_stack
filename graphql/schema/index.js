@@ -86,7 +86,7 @@ module.exports = buildSchema(`
     }
     type RootQuery{
         users(userId: String): [User!]!
-        photos(userId: String!): [Photo!]
+        photos(userId: String!, isMain: Boolean): [Photo!]
         likes: [Like!]
         messages: [Message!]
         login(userName: String!, password: String!): AuthData!

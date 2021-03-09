@@ -2,7 +2,7 @@ import axios from "axios";
 import setAuthToken from "../../utils/set-auth-header";
 import jwt_decode from "jwt-decode";
 
-import { GET_ERRORS, SET_CURRENT_USER } from "./types";
+import { GET_ERRORS, SET_CURRENT_USER, SET_CURRENT_USER_PHOTO } from "./types";
 
 import login from '../../graphql/login';
 
@@ -94,13 +94,9 @@ export const logoutUser = () => (dispatch) => {
   dispatch(setCurrentUser({}));
 };
 
-// export const getUsers = () => {
-//   return dispatch => {
-//     try {
-//       const use
-//     }
-//     catch(error) {
-
-//     }
-//   }
-// }
+export const setUserPhoto = (photoUrl) => {
+  return {
+    type: SET_CURRENT_USER_PHOTO,
+    payload: photoUrl,
+  }
+}

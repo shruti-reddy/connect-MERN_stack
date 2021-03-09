@@ -65,7 +65,7 @@ const bindPhotos = async (photoIds, args) => {
 module.exports = {
   users: async (args) => {
     const userId = args ? args.userId : "";
-    let where = {};
+    let where = { _id: { $ne: '6046ec56d415140022c0b17c' } };
     if (userId) {
       where = {
         _id: userId,

@@ -1,8 +1,9 @@
-const getUserPhotos = async (userId, token) => {
+const getUserPhotos = async (userId, token, isMain = false) => {
   const requestBody = {
     query: `
         {
-          photos(userId: "${userId}"){
+          photos(userId: "${userId}", isMain: ${isMain}){
+            _id
             url
             description
             dateAdded

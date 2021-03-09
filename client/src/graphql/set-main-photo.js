@@ -1,8 +1,9 @@
-const addPhoto = async (token, photoData) => {
+const setMainPhoto = async (token, photoId) => {
     const requestBody = {
         query: `
-            mutation addPhotomutation($photo: PhotoSaveType) {
-                addPhoto(photoSaveType: $photo) {
+            mutation {
+                setMainPhoto(_id: "${photoId}") {
+                    _id
                     url
                     description
                     dateAdded
@@ -12,10 +13,7 @@ const addPhoto = async (token, photoData) => {
                         _id
                     }
                 }
-            }`,
-        variables: {
-            "photo": photoData
-        }
+            }`
     };
     const res = await fetch("/graphql", {
         method: "POST",
@@ -29,4 +27,4 @@ const addPhoto = async (token, photoData) => {
     return data;
 }
 
-export default addPhoto;
+export default setMainPhoto;

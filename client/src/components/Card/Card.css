@@ -1,7 +1,7 @@
 .user-card {
   display: inline-block;
   height: 400px;
-  width: 250px;
+  width: 300px;
   overflow: hidden;
   margin: 10px;
   box-shadow: 0 1rem 1rem rgba(0, 0, 0, 0.25);
@@ -67,11 +67,11 @@
   color: rgba(84, 88, 93);
 }
 
-.user-heart {
+/* .user-heart {
   fill: white;
-  /* position: absolute;
+  position: absolute;
   top: 10px;
-  right: 10px; */
+  right: 10px;
   background-color: transparent;
   border: none;
   margin: 4px;
@@ -80,4 +80,4 @@
 .user-heart:active,
 .user-heart:hover {
   fill: red;
-}
+} */

@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 
-import addPhoto from "../../graphql/addPhoto";
+import addPhoto from "../../graphql/add-photo";
+import setMainPhoto from "../../graphql/set-main-photo"
+import deletePhoto from "../../graphql/delete-photo";
 import getUserPhotos from "../../graphql/get-user-photos";
 import Photo from "../../components/Photo/Photo"
 import "./Photo_editor.css"
+import * as actions from "../../store/actions/index";
 
 class PhotoEditor extends Component {
     constructor(props) {
@@ -76,6 +79,9 @@ class PhotoEditor extends Component {
                 description: `${this.props.username}'s photo`
             }
             const res = await addPhoto(this.props.token, photoData);
+            if (this.state.photos.length === 0) {
+                this.props.onsetCurrentUserMainPhoto(photo.photoUrl);
+            }
             const photos = [...this.state.photos];
             photos.push(res.data.addPhoto);
             this.setState({ photos })
@@ -85,27 +91,17 @@ class PhotoEditor extends Component {
         }
     };
 
-    setMain = () => {
-        console.log('set main');
+    setMain = async (photo) => {
+        const result = await setMainPhoto(this.props.user.token, photo._id);
+        this.props.onsetCurrentUserMainPhoto(result.data.setMainPhoto.url);
     }
 
-    deletePhoto = () => {
-        console.log('delete photo')
+    deletePhoto = async (photo) => {
+        await deletePhoto(this.props.user.token, photo._id);
+        let photos = [...this.state.photos];
+        photos = photos.filter(pto => pto !== photo)
+        this.setState({ photos })
     }
-
-    // onChangeHandler = event => {
-    //     this.setState(
-    //         {
-    //             selectedFile: event.target.files[0],
-    //             loaded: 0,
-    //         }
-    //     )
-    // }
-    // onClickHandler = async () => {
-    //     const data = new FormData();
-    //     data.append('file', this.state.selectedFile);
-    //     const photoUrl = await axios.post("http://localhost:4000/getCloudinaryUrl", data, {})
-    // }
 
     render() {
         return (
@@ -141,8 +137,8 @@ class PhotoEditor extends Component {
                                 <Photo
                                     photo={photo}
                                     key={index}
-                                    setMain={this.setMain}
-                                    deletePhoto={this.deletePhoto}
+                                    setMain={() => this.setMain(photo)}
+                                    deletePhoto={() => this.deletePhoto(photo)}
                                 />
                             ))}
                     </div>
@@ -158,4 +154,11 @@ const mapStateToProps = state => {
         username: state.auth.user.userName
     }
 }
-export default connect(mapStateToProps)(PhotoEditor);
+
+const mapStateToDispatch = dispatch => {
+    return {
+        onsetCurrentUserMainPhoto: (photoUrl) => dispatch(actions.setUserPhoto(photoUrl))
+    }
+}
+
+export default connect(mapStateToProps, mapStateToDispatch)(PhotoEditor);

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Redirect, Route, Switch, withRouter } from "react-router-dom";
 import { connect } from 'react-redux'
+import jwt_decode from "jwt-decode";
 
 import AuthPage from "./views/Auth";
 import MatchesPage from "./views/Matches";
@@ -18,6 +19,7 @@ import Following from "./components/Following/Following";
 import Messages from "./components/Messages/Messages";
 import Photos from "./components/Photos/Photos";
 import PhotoEditor from "./components/Photo_editor/Photo_editor";
+import getUserPhotos from "./graphql/get-user-photos";
 import * as actions from './store/actions/index';
 
 import "./App.css";
@@ -27,6 +29,14 @@ class App extends Component {
   componentDidMount() {
     // axios.defaults.headers.common["Content-Type"] = "application/json";
     this.props.onCheckAuthState();
+    this.getUserMainPhoto();
+  }
+
+  getUserMainPhoto = async () => {
+    const token = localStorage.getItem('jwtToken');
+    const decoded = jwt_decode(token);
+    const result = await getUserPhotos(decoded.userId, token, true);
+    this.props.onSetUserPhoto(result.data.photos[0].url)
   }
 
   render() {
@@ -117,14 +127,16 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    isAuthenticated: state.auth.isAuthenticated
+    isAuthenticated: state.auth.isAuthenticated,
+    currentUserId: state.auth.user.userId
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
     onSetUserToken: (decodedToken) => dispatch(actions.setCurrentUser(decodedToken)),
-    onCheckAuthState: () => dispatch(actions.checkAuthState())
+    onCheckAuthState: () => dispatch(actions.checkAuthState()),
+    onSetUserPhoto: (photoUrl) => dispatch(actions.setUserPhoto(photoUrl))
   }
 }
 

@@ -1,9 +1,5 @@
-// const cloudinary = require("cloudinary").v2;
-
 const { Photo, User } = require("../../models");
 const bindUser = require("./bind-user");
-
-
 
 module.exports = {
   photos: async (args, req) => {
@@ -11,7 +7,11 @@ module.exports = {
       throw new Error("User is not authenticated");
     }
     try {
-      const photos = await Photo.find({ user: args.userId });
+      let where = { user: args.userId };
+      if (args.isMain) {
+        where = { user: args.userId, isMain: args.isMain }
+      }
+      const photos = await Photo.find(where);
       return photos.map((photo) => {
         return {
           ...photo._doc,
@@ -56,21 +56,32 @@ module.exports = {
     }
   },
   setMainPhoto: async (args, req) => {
-    if (!req.isAuth) {
+    if (!req.req.isAuth) {
       throw new Error("User is not authenticated");
     }
     const photoFound = await Photo.findOne({
-      _id: req.userId,
+      _id: args._id
     });
     if (!photoFound) {
       throw new Error("photo doesn't exist");
     }
-    await Photo.updateOne({ isMain: true }, { $set: { isMain: false } });
+    const existingMainPhoto = await Photo.findOne({
+      isMain: true,
+      user: req.req.userId
+    });
+    existingMainPhoto.isMain = false;
+    await existingMainPhoto.save();
+    // await Photo.updateOne({ isMain: true, user: req.req.userId }, { $set: { isMain: false } });
     photoFound.isMain = true;
-    return photoFound.save();
+    const result = await photoFound.save();
+    return {
+      ...result._doc,
+      _id: result.id,
+      user: bindUser.bind(this, result.user),
+    }
   },
   deletePhoto: async (args, req) => {
-    if (!req.isAuth) {
+    if (!req.req.isAuth) {
       throw new Error("User is not authenticated");
     }
     const photoFound = await Photo.findOne({

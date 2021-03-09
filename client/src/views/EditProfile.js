@@ -125,9 +125,8 @@ class EditProfilePage extends Component {
                     <img
                       className="profile--img__img"
                       src={
-                        this.state.user.photos &&
-                          this.state.user.photos.length > 0
-                          ? this.state.user.photos[0].url
+                        this.props.user
+                          ? this.props.user.userPhoto
                           : require("../assets/unknown-user.png")
                       }
                       alt={this.state.user.userName}

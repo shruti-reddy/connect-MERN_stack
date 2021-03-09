@@ -3,5 +3,6 @@ export {
     loginUser,
     setCurrentUser,
     logoutUser,
-    checkAuthState
+    checkAuthState,
+    setUserPhoto
 } from './authActions';
