@@ -60,7 +60,7 @@ const ProfileCard = ({ likeUser, sendMessage, user }) => (
       </div>
       <div className="profile--buttons">
         <button onClick={likeUser} className="btn profile--button">
-          Like
+          Follow
         </button>
         <button onClick={sendMessage} className="btn profile--button">
           Message

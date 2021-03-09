@@ -34,9 +34,11 @@ class App extends Component {
 
   getUserMainPhoto = async () => {
     const token = localStorage.getItem('jwtToken');
-    const decoded = jwt_decode(token);
-    const result = await getUserPhotos(decoded.userId, token, true);
-    this.props.onSetUserPhoto(result.data.photos[0].url)
+    if (token) {
+      const decoded = jwt_decode(token);
+      const result = await getUserPhotos(decoded.userId, token, true);
+      if (result.data.photos.length > 0) this.props.onSetUserPhoto(result.data.photos[0].url)
+    }
   }
 
   render() {

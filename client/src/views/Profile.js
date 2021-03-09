@@ -1,7 +1,10 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { NavLink } from "react-router-dom";
-import ProfileCard from "../components/ProfileCard/ProfileCard";
 
+import ProfileCard from "../components/ProfileCard/ProfileCard";
+import likeUser from "../graphql/like-user";
+import unLikeUser from "../graphql/unlike-user";
 import "./Profile.css";
 
 class ProfilePage extends Component {
@@ -63,9 +66,21 @@ class ProfilePage extends Component {
       });
   };
 
-  likeUser = () => {
-    console.log(`liked the user ${this.state.user.userName}`);
+  // likeUser = () => {
+  //   console.log(`liked the user ${this.state.user.userName}`);
+  // };
+
+  likeUser = async (e) => {
+    e.stopPropagation();
+    console.log('liked the user', this.props.user);
+    await likeUser(this.state.user._id, this.props.token);
   };
+
+  unLikeUser = async (e) => {
+    e.stopPropagation();
+    console.log('unliked the user', this.props.user);
+    await unLikeUser(this.state.user._id, this.props.token);
+  }
 
   sendMessage = () => {
     console.log(`sending message to ${this.state.user.userName}`);
@@ -131,11 +146,17 @@ class ProfilePage extends Component {
             </div>
           </div>
         ) : (
-            <div>Loading...</div>
-          )}
+          <div>Loading...</div>
+        )}
       </div>
     );
   }
 }
 
-export default ProfilePage;
+const mapStateToProps = state => {
+  return {
+    token: state.auth.user.token
+  }
+}
+
+export default connect(mapStateToProps)(ProfilePage);

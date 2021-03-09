@@ -19,28 +19,29 @@ module.exports = {
     }
   },
   likeUser: async (args, req) => {
-    if (!req.isAuth || !req.userId) {
+    if (!req.req.isAuth || !req.req.userId) {
       throw new Error("User is not authenticated");
     }
     try {
       const likeFound = await Like.findOne({
         liked: args.recipientId,
+        likedby: req.req.userId
       });
       if (likeFound) {
         throw new Error("you already liked this user");
       }
       const like = new Like({
         liked: args.recipientId,
-        likedby: req.userId,
+        likedby: req.req.userId,
       });
-      const user = await User.findById(req.userId);
+      const user = await User.findById(req.req.userId);
       user.liked.push(args.recipientId);
       console.log(user);
       await user.save();
       const result = await like.save();
 
       const likeeUser = await User.findById(args.recipientId);
-      likeeUser.likedby.push(req.userId);
+      likeeUser.likedby.push(req.req.userId);
       console.log(likeeUser);
       await likeeUser.save();
       return {

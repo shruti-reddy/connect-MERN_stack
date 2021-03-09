@@ -10,40 +10,6 @@ class MatchesPage extends Component {
     };
   }
 
-  // const requestBody = {
-  //   query: `
-  //   {
-  //     users{
-  //       _id
-  //       userName
-  //       city
-  //       country
-  //       liked {
-  //         count
-  //       }
-  //       likedby {
-  //         count
-  //       }
-  //       photos(isMain: true) {
-  //         url
-  //       }
-  //     }
-  //   }
-  //   `,
-  // };
-
-  // fetch("/graphql", {
-  //   method: "POST",
-  //   body: JSON.stringify(requestBody),
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  // })
-  //   .then((r) => r.json())
-  //   .then((data) => {
-  //     console.log(data.data.users);
-  //     this.setState({ users: data.data.users });
-  //   });
   componentDidMount() {
     getAllUsers().then(res => {
       this.setState({ users: res.data.data.users });
